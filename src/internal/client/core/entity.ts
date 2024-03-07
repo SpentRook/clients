@@ -1,3 +1,4 @@
+import crypto from 'node:crypto';
 export class ClientEntity {
     id: string;
     name: string;
