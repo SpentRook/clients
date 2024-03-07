@@ -3,11 +3,11 @@ import { ClientEntity } from "../../../internal/client/core/entity";
 import { ClientRepository } from "../../../internal/client/core/repository";
 
 export class ClientController {
-    clientRepository: ClientRepository;
+    private clientRepository: ClientRepository;
     constructor(clientRepository: ClientRepository) {
         this.clientRepository = clientRepository;
     }
-    async createClient(req: Request, res: Response) {
+    createClient = async (req: Request, res: Response) => {
         try {
             const { name, email, birth } = req.body;
             if (!name || !email || !birth) {
@@ -18,7 +18,7 @@ export class ClientController {
             }
             const birthDate = new Date(birth);
             if (isNaN(birthDate.getTime())) {
-                return res.status(400).json({ error: 'Invalid birth date' });
+                return res.status(400).json({ error: 'Invalid birth date, it must follow the format: "MM/DD/YYYY"' });
             }
             
             const client = new ClientEntity(name, email, birthDate);
@@ -28,11 +28,11 @@ export class ClientController {
             res.status(500).json({ error: error.message });
         }
     }
-    async listClients(_req: Request, res: Response) {
+    listClients = async (_req: Request, res: Response) => {
         const clients = await this.clientRepository.listClients();
         res.json(clients);
     }
-    async getClient(req: Request, res: Response) {
+    getClient = async (req: Request, res: Response) => {
         try {
             const { id } = req.params;
             const client = await this.clientRepository.getClient(id);
@@ -41,7 +41,7 @@ export class ClientController {
             res.status(404).json({ error: error.message });
         }
     }
-    async updateClient(req: Request, res: Response) {
+    updateClient = async (req: Request, res: Response) => {
         const { id } = req.params;
         const { name, email, birth } = req.body;
         const client = new ClientEntity(name, email, new Date(birth));
@@ -49,7 +49,7 @@ export class ClientController {
         await this.clientRepository.updateClient(client);
         res.json(client);
     }
-    async deleteClient(req: Request, res: Response) {
+    deleteClient = async (req: Request, res: Response) => {
         const { id } = req.params;
         await this.clientRepository.deleteClient(id);
         res.status(204).end();
