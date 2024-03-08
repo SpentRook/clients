@@ -30,7 +30,7 @@ export class ClientController {
     }
     listClients = async (_req: Request, res: Response) => {
         const clients = await this.clientRepository.listClients();
-        res.json(clients);
+        res.status(200).json(clients);
     }
     getClient = async (req: Request, res: Response) => {
         try {
@@ -47,7 +47,7 @@ export class ClientController {
         const client = new ClientEntity(name, email, new Date(birth));
         client.id = id;
         await this.clientRepository.updateClient(client);
-        res.json(client);
+        res.status(200).json(client);
     }
     deleteClient = async (req: Request, res: Response) => {
         const { id } = req.params;
